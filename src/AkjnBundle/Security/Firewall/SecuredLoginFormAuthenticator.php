@@ -213,7 +213,8 @@ class SecuredLoginFormAuthenticator extends FOSUserProvider implements SimpleFor
 
     public function ckeckAccountStatus($user) {
 
-        $expired = $user->isCredentialsExpired();
+        //$expired = $user->isCredentialsExpired();
+        $expired = $user->isCredentialsNonExpired();
         if (!is_null($user->getAttemptedAt())) {
             $attemptedTime = $user->getAttemptedAt()->format('Y-m-d H:i:s');
             $datetime1 = strtotime($attemptedTime);
