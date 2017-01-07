@@ -7,7 +7,6 @@
 .buildpath
 .project
 .settings/*
-composer.lock
 /nbproject
 /nbproject/private/
 .mysql_history
