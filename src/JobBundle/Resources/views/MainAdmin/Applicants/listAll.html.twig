@@ -1,0 +1,180 @@
+{% extends 'JobBundle:MainAdmin:index.html.twig' %}
+{% block mainadminstylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+{%block mainadminbody%}
+    <div class="admin-content-wrapper">
+        <div class="admin-section-title">
+            <h2>Manage Applicants</h2>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel panel-body">
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                            </div>
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover" style="border: 2px solid;">
+                                    <tbody>
+                                        <tr>
+                                            <th></th>
+                                            <th  style="text-align:center">Applicant Details</th>
+                                            <th  style="text-align:center">Skills</th>
+                                            <th  style="text-align:center">DOB Details</th>
+                                            <th  style="text-align:center">Show in Main page</th>
+                                            <th  style="text-align:center">Action</th>
+                                        </tr>
+                                        {%for applicant in applicants%}
+                                            <tr>
+                                                <td>
+                                                    <div class="recent-job-item clearfix">
+                                                        <div class="image">
+                                                            {%if applicant.jobSeekerId.userImage is null%}
+                                                                <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" alt="image">
+                                                            {%else%}
+                                                                <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" alt="image">
+                                                            {%endif%}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="content">
+                                                        <h4 style="margin-bottom:0px">{{applicant.jobSeekerId.firstName}} {{applicant.jobSeekerId.lastName}}</h4>
+                                                        <p  style="margin-bottom:0px">+91 {{applicant.jobSeekerId.phoneNumber}}</p>
+                                                        <p  style="margin-bottom:0px">{{applicant.jobSeekerId.email}}</p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {% set skills = applicant.skills|split(',') %}
+                                                    <div class="job-item-list-bottom">
+                                                        <div class="sub-category">
+                                                            {%for skill in skills%}
+                                                                <a href="javascript:void(0);">{{skill}}</a>
+                                                            {%endfor%}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="job-location">
+                                                        {{applicant.jobSeekerId.dob|date('d/m/Y')}}
+                                                        <p>No. of Jobs applied: 0</p>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {%if applicant.jobSeekerId.priorityFlag == true%}
+                                                        {%if applicant.showInFrontPage == true%}
+                                                            <input type="checkbox" class="show-fron-page" data-guid="{{applicant.guId}}" style="display:block; opacity: 1.00;float:none;margin: auto;" checked>
+                                                        {%else%}
+                                                            <input type="checkbox" class="show-fron-page" data-guid="{{applicant.guId}}" style="display:block; opacity: 1.00;float:none;margin: auto;">
+                                                        {%endif%}
+                                                    {%else%}
+                                                        <input type="checkbox" class="not-allowed" dissabled="true"  style="display:block; opacity: 1.00;float:none;margin: auto;">
+                                                    {%endif%}
+                                                </td>
+                                                <td>
+                                                    {%if applicant.jobSeekerId.priorityFlag == true%}
+                                                        <div class="flipswitch" style="margin: auto;">
+                                                            <input type="checkbox" name="flipswitch" class="flipswitch-cb" id="fs-{{applicant.jobSeekerId.guId}}" data-guid="{{applicant.jobSeekerId.guId}}" checked style="display:none">
+                                                            <label class="flipswitch-label" for="fs-{{applicant.jobSeekerId.guId}}"  style="padding: 0px 0px 0px 0px">
+                                                                <div class="flipswitch-inner"></div>
+                                                                <div class="flipswitch-switch"></div>
+                                                            </label>
+                                                        </div>
+                                                    {%else%}
+                                                        <div class="flipswitch"  style="margin: auto;">
+                                                            <input type="checkbox" name="flipswitch" class="flipswitch-cb" data-guid="{{applicant.jobSeekerId.guId}}" id="fs-{{applicant.jobSeekerId.guId}}" style="display:none">
+                                                            <label class="flipswitch-label" for="fs-{{applicant.jobSeekerId.guId}}" style="padding: 0px 0px 0px 0px">
+                                                                <div class="flipswitch-inner"></div>
+                                                                <div class="flipswitch-switch"></div>
+                                                            </label>
+                                                        </div>
+                                                    {%endif%}
+                                                    <span class="font12 block spacing1 font400 text-center">View Details</span>
+                                                    <span class="font12 block spacing1 font400 text-center">Download Resume</span>
+                                                </td>
+                                            </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{% block mainadminjavascript %}
+    {{ parent() }}
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+        {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                    var message = "{{message}}";
+                    swal(message);
+            {% endfor %}
+        {% endfor %}
+
+                $(".flipswitch-cb").change(function () {
+                    var guid = $(this).data('guid');
+                    var path = "{{path('change_applicant_priority',{'guId':"__guId__"})}}";
+                    path = path.replace("__guId__", guid);
+                    $.ajax({
+                        type: "POST",
+                        url: path,
+                        context: this,
+                        beforeSend: function () {
+                            $(this).after();
+                        },
+                        success: function ($data) {
+                            if ($data[0] === 'madeFalse') {
+                                swal("Golden Priotity Removed for " + $data[1]);
+                            } else {
+                                swal($data[1] + " Given Golden Priotity");
+                            }
+                        },
+                        complete: function () {
+                            $(this).next(".loading-img").remove();
+                        }
+                    });
+                });
+
+                $(".show-fron-page").change(function () {
+                    var guid = $(this).data('guid');
+                    var path = "{{path('show_applicant_in_front_page',{'guId':"__guId__"})}}";
+                    path = path.replace("__guId__", guid);
+                    $.ajax({
+                        type: "POST",
+                        url: path,
+                        context: this,
+                        beforeSend: function () {
+                            $(this).after();
+                        },
+                        success: function ($data) {
+                            if ($data) {
+                                swal($data);
+                            } else {
+                                swal("Some error occured !!!");
+                            }
+                        },
+                        complete: function () {
+                            $(this).next(".loading-img").remove();
+                        }
+                    });
+                });
+                
+                $(".not-allowed").click(function(){
+                    swal("Please give the applicant the GOLDEN priority to add him to main page. (Please refresh the page after giving the Golden priority)");
+                    $(this).prop('checked',false);
+                });
+
+            });
+    </script>
+{% endblock %}

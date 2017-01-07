@@ -1,0 +1,116 @@
+{% extends 'JobBundle:Default:jobPortalPageMaster.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+{% block resultsStyle %}{% endblock %}
+{% endblock %}
+{% block body %}
+    <div class="second-search-result-wrapper">
+        <div class="container">
+            {{ render(controller('JobBundle:Search:mainResumeSearchForm')) }}
+        </div>
+    </div>
+
+    <div class="section sm">
+        <div class="container">
+            {% block resultsBody %}
+                <div class="sorting-wrappper">
+                    <div class="sorting-header">
+                        <h3 class="sorting-title">Search For Golden Resume (GR)</h3>
+                    </div>
+                    <div class="sorting-content">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-7">
+                                <div class="row gap-10">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-wrapper">
+        <div class="row">
+            <div class="col-sm-10 col-md-12 mt-25">
+                <div class="result-list-wrapper">
+                    {%if applicants|length > 0%}
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover" style="border: 2px solid;">
+                                <tbody>
+                                    <tr>
+                                        <th></th>
+                                        <th  style="text-align:center">Applicant Details</th>
+                                        <th  style="text-align:center">Skills</th>
+                                        <th  style="text-align:center">DOB Details</th>
+                                        <th  style="text-align:center">Action</th>
+                                    </tr>
+                                    {%for applicant in applicants%}
+                                        <tr>
+                                            <td>
+                                                <div class="recent-job-item clearfix">
+                                                    <div class="image">
+                                                        {%if applicant.jobSeekerId.userImage is null%}
+                                                            <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" alt="image">
+                                                        {%else%}
+                                                            <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" alt="image">
+                                                        {%endif%}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="content">
+                                                    <h4 style="margin-bottom:0px">{{applicant.jobSeekerId.firstName}} {{applicant.jobSeekerId.lastName}}</h4>
+                                                    <p  style="margin-bottom:0px">+91 {{applicant.jobSeekerId.phoneNumber}}</p>
+                                                    <p  style="margin-bottom:0px">{{applicant.jobSeekerId.email}}</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {% set skills = applicant.skills|split(',') %}
+                                                <div class="job-item-list-bottom">
+                                                    <div class="sub-category">
+                                                        {%for skill in skills%}
+                                                            <a href="javascript:void(0);">{{skill}}</a>
+                                                        {%endfor%}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="job-location">
+                                                    {{applicant.jobSeekerId.dob|date('d/m/Y')}}
+                                                    <p>No. of Jobs applied: 0</p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#"><span class="font12 block spacing1 font400 text-center">View Details</span></a>
+                                                <a href="#"><span class="font12 block spacing1 font400 text-center">Download Resume</span></a>
+                                            </td>
+                                        </tr>
+                                    {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    {%else%}
+                        <div class="job-item-list featured"> 
+                            <div class="content">
+                                <div class="job-item-list-info">
+                                    <div class="row">
+                                        <label>No Jobs Found !!!</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {%endif%}
+                </div>
+                <div class="pager-wrapper">
+                    {#                            Pagination#}
+                </div>
+            </div>
+        </div>
+    </div>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+{% block resultsScript %}{% endblock %}
+{% endblock %}

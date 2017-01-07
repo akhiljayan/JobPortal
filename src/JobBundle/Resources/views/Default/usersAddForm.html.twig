@@ -1,0 +1,176 @@
+<style type="text/css">
+
+</style>
+{{ form_start(form,{'attr':{'id':'registration-form'} }) }}
+<div class="modal-body" id="modal-body">               
+    <div class="row gap-20">
+        <div class="toggle_radio">
+            <input type="radio" class="radiobtn" id="job-seeker" name="user-type" value="jobSeeker"  checked="checked" style="float: left;clear: none;display: block;padding: 4px 4em 11px 16px;">
+            <label for="job-seeker" style="float: left;clear: none;display: block;padding: 4px 4em 11px 16px;">Job Seeker</label>
+            <input type="radio" class="radiobtn" id="employeer" name="user-type" value="employeer" style="float: left;clear: none;display: block;padding: 4px 4em 11px 16px;">
+            <label for="employeer" style="float: left;clear: none;display: block;padding: 4px 4em 11px 16px;">Employer</label>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group"> 
+                <label>{{ form_label(form.name) }}</label>
+                {{ form_widget(form.name,{'attr':{'id':'name'} }) }}
+                <span id="name-error"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group"> 
+                <label>{{ form_label(form.username) }}</label>
+                {{ form_widget(form.username,{'attr':{'id':'username'} }) }}
+                <span id="username-error"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group"> 
+                <label>{{ form_label(form.email) }}</label>
+                {{ form_widget(form.email,{'attr':{'id':'email'} }) }}
+                <span id="email-error"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group"> 
+                <label>{{ form_label(form.mobile) }}</label>
+                {{ form_widget(form.mobile,{'attr':{'id':'mobile'} }) }}
+                <span id="mobile-error"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group"> 
+                <label>{{ form_row(form.password) }}</label>
+                <span id="password-error"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="checkbox-block"> 
+                <input id="register_accept_checkbox" name="register_accept_checkbox" class="checkbox" value="First Choice" type="checkbox"> 
+                <label class="" for="register_accept_checkbox">By register, I read &amp; accept <a href="#">the terms</a></label>
+                <span id="tnc-error"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="login-box-box-action">
+                Already have account? <a data-toggle="modal" href="#loginModal">Log-in</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer text-center">
+    <button type="submit" id="register-user-btn"  class="btn btn-primary" value="Register" >Register</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary btn-inverse">Close</button>
+</div>
+{{ form_end(form) }}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".radiobtn").click(function () {
+            var usrerType = $(this).val();
+            alert(usrerType);
+            $("{{form.userType.vars.id}}").val(usrerType);
+        });
+
+        $("body").on("click", "#register-user-btn", function (e) {
+            e.preventDefault();
+            var userExist = false;
+            var username = $('#{{form.username.vars.id}}').val();
+            var $verifyUserpath = "{{path('new_user_username_check',{'name':'__name__'}) }}";
+            $verifyUserpath = $verifyUserpath.replace('__name__', username);
+            $.ajax({
+                type: "POST",
+                url: $verifyUserpath,
+                context: this,
+                beforeSend: function () {
+                    $(this).after();
+                },
+                success: function ($data) {
+                    if ($data === "true") {
+                        userExist = true;
+                    } else {
+                        userExist = false;
+                    }
+                },
+                complete: function () {
+                    $(this).next(".loading-img").remove();
+                }
+            });
+            if (validateForm(userExist)) {
+                $("#registration-form").submit();
+            }
+        });
+    });
+
+   function validateForm(userExist) {
+            var retrn = 0;
+
+            var nameReg = /^[A-Za-z]+$/;
+            var numberReg = /^[0-9]+$/;
+            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+
+            var names = $('#{{form.name.vars.id}}').val();
+            var username = $('#{{form.username.vars.id}}').val();
+            var email = $('#{{form.email.vars.id}}').val();
+            var mobile = $('#{{form.mobile.vars.id}}').val();
+            var password1 = $('#akjnbundle_user_password_first').val();
+            var password2 = $('#akjnbundle_user_password_second').val();
+
+            var inputVal = new Array(names, username, email, mobile, password1, password2);
+            var inputMessage = new Array("name", "username", "email address", "mobile number", "passwords", "passwords");
+
+
+
+            $('.error').hide();
+            if (inputVal[0] === "") {
+                $('#name-error').html('<span class="error"> Please enter your ' + inputMessage[0] + '</span>');
+            } else if (userExist === false) {
+                $('#username-error').html('<span class="error"> Username already exists</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[1] === "") {
+                $('#username-error').html('<span class="error"> Please enter your ' + inputMessage[1] + '</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[2] === "") {
+                $('#email-error').html('<span class="error"> Please enter your ' + inputMessage[2] + '</span>');
+            } else if (!emailReg.test(email)) {
+                $('#email-error').html('<span class="error"> Please enter a valid email address</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[3] === "") {
+                $('#mobile-error').after('<span class="error"> Please enter your ' + inputMessage[3] + '</span>');
+            } else if (!numberReg.test(mobile)) {
+                $('#mobile-error').html('<span class="error"> Numbers only.. dont use +91</span>');
+            } else if (inputVal[3].length !== 10) {
+                $('#mobile-error').html('<span class="error">please enter 10 digit mobile number without +91</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[4] === "" || inputVal[5] === "") {
+                $('#password-error').html('<span class="error"> Please enter your ' + inputMessage[4] + '</span>');
+            } else if (inputVal[4] !== inputVal[5]) {
+                $('#password-error').html('<span class="error">Passwords entered does not match</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (!$("#register_accept_checkbox").is(":checked")) {
+                $('#password-error').html('<span class="error">Please read and acknowledge terms and condition</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (retrn === 6) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+</script>

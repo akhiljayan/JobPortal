@@ -1,0 +1,56 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+    encoders:
+        AkjnBundle\Entity\User:
+            id: security.encoder.securedlogin
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_SUPER_ADMIN, ROLE_MAIN_ADMIN, ROLE_ORDINARY_JOBSEEKER, ROLE_PROIORTY_JOBSEEKER, ROLE_JOB_EMPLOYEER]
+        ROLE_MAIN_ADMIN: [ROLE_MAIN_ADMIN]
+        ROLE_PROIORTY_JOBSEEKER: [ROLE_ORDINARY_JOBSEEKER, ROLE_PROIORTY_JOBSEEKER]  
+        ROLE_ORDINARY_JOBSEEKER: [ROLE_ORDINARY_JOBSEEKER] 
+        ROLE_JOB_EMPLOYEER: [ROLE_JOB_EMPLOYEER]  
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        fos_userbundle:
+                id: fos_user.user_provider.username_email
+        in_memory:
+            memory: ~
+
+    firewalls:
+        main:
+            pattern: ^/
+            simple-form:
+                provider:      fos_userbundle
+                authenticator: security.authenticator.securedlogin
+                login_path:    /login
+                csrf_provider: form.csrf_provider
+                use_forward:   true
+                
+                # login success redirecting options (read further below)
+                always_use_default_target_path: false
+                default_target_path: /
+                target_path_parameter: _target_path
+                use_referer: false
+                
+                check_path:    /security/login_check
+                success_handler: akjn.security.handler.login_success_handler
+                failure_handler: akjn.security.handler.login_failure_handler
+                failure_path:   /
+                
+                username_parameter: _peru
+                password_parameter: _thakol
+                
+            logout:
+                path:   /prelogout
+                target: /
+                success_handler: akjn.security.handler.logout_success_handler
+            anonymous:   true
+            
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/mainadmin/, roles: [ROLE_SUPER_ADMIN, ROLE_MAIN_ADMIN] }
+#        - { path: ^/panel/, roles: [ROLE_SM_ADMIN, ROLE_SM_SUPERUSER] }
+#        - { path: ^/masters/, roles: [ROLE_SM_ADMIN, ROLE_SM_SUPERUSER] }        

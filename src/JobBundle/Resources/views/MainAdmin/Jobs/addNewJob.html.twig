@@ -1,0 +1,131 @@
+{% extends 'JobBundle:MainAdmin:index.html.twig' %}
+{% block mainadminstylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        .small-width{
+            width:50% !important; 
+        }
+    </style>
+{% endblock %}
+{%block mainadminbody%}
+    <div class="admin-content-wrapper">
+        <div class="admin-section-title">
+            <h2>Add a Job</h2>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel panel-body">
+                {{form_start(form)}}
+                <div class="col-md-12" style="padding-bottom:20px;">
+                    <div class="col-md-6">{{form_row(form.jobTitle)}}</div>
+                    <div class="col-md-6">{{form_row(form.company)}}</div>
+                </div>
+                <div class="col-md-12" style="padding-bottom:20px;">
+                    <div class="col-md-6">{{form_row(form.category)}}</div>
+                    <div class="col-md-6">{{form_row(form.subCategory)}}</div>
+                </div>
+                <div class="col-md-12" style="padding-bottom:20px;">
+                    <div class="col-md-4">{{form_row(form.jobDesignation)}}</div>
+                    <div class="col-md-4">{{form_row(form.vacancy)}}</div>
+                    <div class="col-md-4">{{form_row(form.location)}}</div>
+                </div>
+                <div class="col-md-12" style="padding-bottom:40px;">
+                    <div class="col-md-6">
+                        <label>Experience Range</label>
+                        <div class="col-md-12"  style="padding:0px">
+                            <div class="col-md-6"  style="padding-left:0px">{{form_widget(form.experYearFrom)}}</div>
+                            <div class="col-md-6"  style="padding-right:0px">{{form_widget(form.exprYearTo)}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Salary Range</label>
+                        <div class="col-md-12" style="padding:0px">
+                            <div class="col-md-6"  style="padding-left:0px">{{form_widget(form.slaryStart)}}</div>
+                            <div class="col-md-6"  style="padding-right:0px">{{form_widget(form.salaryTo)}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding-bottom:40px;">
+                    <label>Skills Required</label>
+                    <select class="js-skills-tags form-control select2-hidden-accessible" multiple="multiple" tabindex="-1" aria-hidden="true"></select>
+                    {{form_row(form.skillsRequired)}}
+                </div>
+                <div class="col-md-12" style="padding-bottom:40px;">
+                    {{form_row(form.jobDescription)}}
+                </div>
+                <div class="col-md-12" style="padding-bottom:40px;">
+                    {{form_row(form.responsibilities)}}
+                </div>
+                <div class="col-md-12" style="padding-bottom:40px;">
+                    {{form_row(form.qualification)}}
+                </div>
+                <div class="col-sm-6" style="float:right">
+                    <button type="submit" class="btn btn-primary btn-lg"  style="float:right">Create Job</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{% block mainadminjavascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var $tags = $(".js-skills-tags");
+        $.fn.select2.defaults.set("width", "100%");
+        $tags.select2({
+            tags: true
+        });
+
+        var $category = $('#{{form.category.vars.id}}');
+        // When sport gets selected ...
+        $category.change(function () {
+            // ... retrieve the corresponding form.
+            var $form = $(this).closest('form');
+            // Simulate form data, but only include the selected sport value.
+            var data = {};
+            data[$category.attr('name')] = $category.val();
+            // Submit data via AJAX to the form's action path.
+            $.ajax({
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: data,
+                success: function (html) {
+                    // Replace current position field ...
+                    $('#{{form.subCategory.vars.id}}').replaceWith(
+                            // ... with the returned one from the AJAX response.
+                            $(html).find('#{{form.subCategory.vars.id}}')
+                            );
+                    // Position field now displays the appropriate positions.
+                }
+            });
+        });
+
+        $(document).ready(function () {
+        {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                    var message = "{{message}}";
+                    swal(message);
+            {% endfor %}
+        {% endfor %}
+                $tags.change(function () {
+                    $("#{{form.skillsRequired.vars.id}}").val($(this).val());
+                });
+
+                var numberReg = /^[0-9]+$/;
+                $("#{{form.slaryStart.vars.id}}").keyup(function () {
+                    if (!numberReg.test($(this).val())) {
+                        swal("Only numbers are allowed!!");
+                        $(this).val("");
+                    }
+                });
+                $("#{{form.salaryTo.vars.id}}").keyup(function () {
+                    if (!numberReg.test($(this).val())) {
+                        swal("Only numbers are allowed!!");
+                        $(this).val("");
+                    }
+                });
+
+
+            });
+    </script>
+{% endblock %}

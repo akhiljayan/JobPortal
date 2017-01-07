@@ -1,0 +1,436 @@
+{% extends '::baseMain.html.twig' %}
+{% block title %}
+    Job portal
+{% endblock %}
+{% block mainStylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        .section-title p{
+            margin: 15px 0 0 !important;
+        } 
+    </style>
+    {% block stylesheets %}
+    {% endblock %}
+{% endblock %}
+{% block mainBody %}
+
+    <header id="header">
+        <!-- start Navbar (Header) -->
+        <nav class="navbar navbar-default navbar-fixed-top navbar-sticky-function"  style="background: rgba(0, 0, 0, 0.4) none repeat scroll 0 0;">
+            <div class="container">
+                <div class="logo-wrapper">
+                    <div class="logo">
+                        <a href="{{path('home_page_redirect')}}"><img alt="Logo" src="{{ asset('bundles/job/images/logo.png')}}"></a>
+                    </div>
+                </div>
+                <div id="navbar" class="navbar-nav-wrapper navbar-arrow">
+                    <ul class="nav navbar-nav" id="responsive-menu">
+                        <li>
+                            <a href="{{path('home_page_redirect')}}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{{path('menu_search_jobs')}}">Search Jobs</a>
+                        </li>
+                        <li>
+                            <a href="{{path('menu_search_golden_resume')}}">Golden Resume</a>
+                        </li>
+                        {% if is_granted('ROLE_JOB_EMPLOYEER') %}
+                            <li>
+                                <a href="">Employee</a>
+                            </li>
+                            <li>
+                                <a href="employer-login.html">Employer</a>
+                                <ul>
+                                    <li><a href="employer-register.html">Employer registration</a></li>
+                                    <li><a href="employer-forget.html">Employer forget password</a></li>
+                                    <li><a href="employer-login.html">Employer login</a></li>
+                                    <li><a href="employer-detail.html">Employer Detail</a></li>
+                                </ul>
+                            </li>
+                        {%endif%}
+                        {% if is_granted('ROLE_MAIN_ADMIN') %}
+                            <li>
+                                <a href="{{path('job_bundle_home_page')}}">Admin Pannel</a>
+                            </li>
+                        {%endif%}
+                        <li>
+                            <a href="#">About Us</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact US</a>
+                        </li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+                <div class="nav-mini-wrapper">
+                    {% if app.user %}
+                        <ul class="nav-mini sign-in">
+                            {%if app.user.name is null%}
+                                <span style="float: right;text-align: right;width: 100%; color:#fff">Welcome: {{app.user.username}}</span>
+                            {%else%}
+                                <span style="float: right;text-align: right;width: 100%;color:#fff">Welcome: {{app.user.name}}</span>
+                            {%endif%}
+                            <li style="float: right;"><a href="{{path('_logout')}}">logout</a></li>
+                        </ul>
+                    {%else%}
+                        <ul class="nav-mini sign-in">
+                            <li><a href="{{path('redirect_login_page')}}">login</a></li>
+                            <li><a href="javascript:void(0)" id="register-new-user">register</a></li>
+                        </ul>
+                    {%endif%}
+                </div>
+            </div>
+            <div id="slicknav-mobile"></div>
+        </nav>
+        <!-- end Navbar (Header) -->
+
+        <!-- start Sign-in Modal -->
+
+        <!-- end Sign-in Modal -->
+
+        <!-- start Register Modal -->
+        <div id="registerModal" class="modal fade login-box-wrapper" tabindex="-1" style="display: none;" data-backdrop="static" data-keyboard="false" data-replace="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center">Create your account for free</h4>
+            </div>
+            <div id="modal-main">
+
+            </div>
+        </div>
+    </header>
+    <div class="main-wrapper">
+        {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                <div class="alert alert-{{ key }}">
+                    <b>Alert!</b> {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% block body %}
+            <!-- start hero-header -->
+            <div class="hero alt-pb" style="background-image:url({{ asset('bundles/job/images/hero-header/03.jpg')}});">
+                <div class="container">
+                    <h1>your future starts here now</h1>
+                    <p>Finding your next job or career more 1000+ availabilities</p>
+                    <div class="main-search-form-wrapper"  style="background: rgba(0, 0, 0, 0.4) none repeat scroll 0 0;">
+                        {{ render(controller('JobBundle:Default:homePageJobSearch')) }}
+                    </div>
+                </div>
+            </div>
+            <!-- end hero-header -->
+            <div class="post-hero no-bb">
+                <div class="container">
+                    <div class="post-hero-inner-shahow pt-40 pb-10 bg-light">
+                        <div class="row mt-5">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="counting-item alt-number-sm">
+                                            <div class="counting-number h1">
+                                                <a href="javascript:void(0)" id="register-new-user"><img src="{{ asset('bundles/job/images/icons/computer-1.png')}}" style="height:60px; margin:auto"></a>
+                                            </div>
+                                            Create an Account
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="counting-item alt-number-sm">
+                                            <div class="counting-number h1">
+                                                <a href="#"><img src="{{ asset('bundles/job/images/icons/group.png')}}"  style="height:60px; margin:auto"></a>
+                                            </div>
+                                            Search Golden Resume
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        <div class="counting-item alt-number-sm">
+                                            <div class="counting-number h1">
+                                                <a href="#"><img src="{{ asset('bundles/job/images/icons/user.png')}}"  style="height:60px; margin:auto"></a>
+                                            </div>
+                                            Testimonial
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Top 4 featured jobs-->
+            <div class=" pb-80 pt-80" >
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                            <div class="section-title mb-50">
+                                <h2>Featured Hot Jobs</h2>
+                                <p>Find out most popular hot jobs in market</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% block menuFeaturedJob %}
+                    {%endblock%}
+                </div>
+                <div class="mt-40" style="text-align:center">
+                    <a style="border:1px solid; border-radius:10px; padding:3px; color:#34464b" href="{{path('menu_search_jobs')}}">View More</a>
+                </div>
+            </div>
+
+            <!--apply / employeer-->
+            <div class="image-bg-wrapper counting-wrapper" style="background-image:url('{{ asset('bundles/job/images/about-us-image-bg.jpg')}}');">
+                <div class="container mt-5 mb-30">
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                                <h1>Over Than 4.8+ Million Jobs</h1>
+                                <p class="font24 mb-30">More jobs, more opputunies</p>
+                                <p>Instrument cultivated alteration any favourable expression 
+                                    law far nor. Both new like tore but year. An from mean on with when sing
+                                    pain. Oh to as principles devonshire companions unsatiable an 
+                                    delightful. The ourselves suffering the sincerity.</p>
+                                <div class="mt-40">
+                                    <a href="#" class="btn btn-lg btn-dark">Post a job</a>
+                                    <a href="#" class="btn btn-lg btn-dark">Upload resume</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--latest jobs-->
+            <div class="bg-light pt-80 pb-80">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                            <div class="section-title">
+                                <h2>Golden Resume</h2>
+                            </div>
+                        </div>
+                    </div>
+                    {% block menuLatestJob %}
+                    {%endblock%}
+                </div>
+                <div class="mt-40" style="text-align:center">
+                    <a style="border:1px solid; border-radius:10px; padding:3px; color:#34464b" href="{{path('menu_search_golden_resume')}}">View More</a>
+                </div>
+            </div>
+            <!--testimonials-->
+            <div class="bg-light pb-80" style="border-top:1px solid">
+                <div class="container">
+                    <div class="row  mt-25">
+                        <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+                            <div class="section-title mb-50">
+                                <h2>What people say about us</h2>
+                                <p>Blush on in jokes sense do do. Brother hundred he assured reached</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% block menuTestimonials %}
+                    {%endblock%}
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+    <footer class="footer-wrapper">
+        <div class="main-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-9">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="footer-about-us">
+                                    <h5 class="footer-title">about Kerala Click Jobs</h5>
+                                    <p>Sudden looked elinor off gay estate nor silent. Son read such next see the rest two. Was use extent old entire sussex...</p>
+                                    <a href="#">read more</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-5 mt-30-xs">
+                                <h5 class="footer-title">quick links</h5>
+                                <ul class="footer-menu clearfix">
+                                    <li><a href="#">Local Jobs</a></li>
+                                    <li><a href="#">Company Directory</a></li>
+                                    <li><a href="#">Browse Jobs</a></li>
+                                    <li><a href="#">Salary Estimator</a></li>
+                                    <li><a href="#">Success Stories</a></li>
+                                    <li><a href="#">Help</a></li>
+                                    <li><a href="#">Post a Job</a></li>
+                                    <li><a href="#">Employer Login</a></li>
+                                    <li><a href="#">Publisher</a></li>
+                                    <li><a href="#">Include My Jobs</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 mt-30-sm">
+                        <h5 class="footer-title">newsletter</h5>
+                        <p>Subsribe to get our latest updates and oeffers</p>
+                        <div class="footer-newsletter">
+                            <div class="form-group">
+                                <input class="form-control" placeholder="enter your email " />
+                                <button class="btn btn-primary">subsribe</button>
+                            </div>
+                            <p class="font-italic font13">*** Don't worry, we wont spam you!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4">
+                        <p class="copy-right">&#169; Copyright 2017 Akjn</p>
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <ul class="bottom-footer-menu">
+                            <li><a href="#">Cookies</a></li>
+                            <li><a href="#">Policies</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Blogs</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <ul class="bottom-footer-menu for-social">
+                            <li><a href="#"><i class="ri ri-twitter" data-toggle="tooltip" data-placement="top" title="twitter"></i></a></li>
+                            <li><a href="#"><i class="ri ri-facebook" data-toggle="tooltip" data-placement="top" title="facebook"></i></a></li>
+                            <li><a href="#"><i class="ri ri-google-plus" data-toggle="tooltip" data-placement="top" title="google plus"></i></a></li>
+                            <li><a href="#"><i class="ri ri-youtube-play" data-toggle="tooltip" data-placement="top" title="youtube"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+{% endblock %}
+{% block mainJavascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("body").on("click", "#register-new-user", function () {
+                var $path = "{{path('new_user_creation') }}";
+                $.ajax({
+                    type: "POST",
+                    url: $path,
+                    context: this,
+                    beforeSend: function () {
+                        $(this).after();
+                    },
+                    success: function ($data) {
+                        $("#modal-main").html($data);
+                        $("#registerModal").modal("show");
+                    },
+                    complete: function () {
+                        $(this).next(".loading-img").remove();
+                    }
+                });
+            });
+
+            $("body").on("click", "#register-user-btn", function () {
+                var userExist = false;
+                var username = $('#akjnbundle_user_username').val();
+                var $verifyUserpath = "{{path('new_user_username_check',{'name':'__name__'}) }}";
+                $verifyUserpath = $verifyUserpath.replace('__name__', username);
+                $.ajax({
+                    type: "POST",
+                    url: $verifyUserpath,
+                    context: this,
+                    beforeSend: function () {
+                        $(this).after();
+                    },
+                    success: function ($data) {
+                        if ($data === "true") {
+                            userExist = true;
+                        } else {
+                            userExist = false;
+                        }
+                    },
+                    complete: function () {
+                        $(this).next(".loading-img").remove();
+                    }
+                });
+                if (validateForm(userExist)) {
+                    $("#registration-form").submit();
+                }
+            });
+        });
+
+        function validateForm(userExist) {
+            var retrn = 0;
+
+            var nameReg = /^[A-Za-z]+$/;
+            var numberReg = /^[0-9]+$/;
+            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+
+            var names = $('#akjnbundle_user_name').val();
+            var username = $('#akjnbundle_user_username').val();
+            var email = $('#akjnbundle_user_email').val();
+            var mobile = $('#akjnbundle_user_mobile').val();
+            var password1 = $('#akjnbundle_user_password_first').val();
+            var password2 = $('#akjnbundle_user_password_second').val();
+
+            var inputVal = new Array(names, username, email, mobile, password1, password2);
+            var inputMessage = new Array("name", "username", "email address", "mobile number", "passwords", "passwords");
+
+
+
+            $('.error').hide();
+            if (inputVal[0] === "") {
+                $('#name-error').html('<span class="error"> Please enter your ' + inputMessage[0] + '</span>');
+            } else if (userExist === false) {
+                $('#name-error').html('<span class="error"> User already exists</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[1] === "") {
+                $('#username-error').html('<span class="error"> Please enter your ' + inputMessage[1] + '</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[2] === "") {
+                $('#email-error').html('<span class="error"> Please enter your ' + inputMessage[2] + '</span>');
+            } else if (!emailReg.test(email)) {
+                $('#email-error').html('<span class="error"> Please enter a valid email address</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[3] === "") {
+                $('#mobile-error').after('<span class="error"> Please enter your ' + inputMessage[3] + '</span>');
+            } else if (!numberReg.test(mobile)) {
+                $('#mobile-error').html('<span class="error"> Numbers only.. dont use +91</span>');
+            } else if (inputVal[3].length !== 10) {
+                $('#mobile-error').html('<span class="error">please enter 10 digit mobile number without +91</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (inputVal[4] === "" || inputVal[5] === "") {
+                $('#password-error').html('<span class="error"> Please enter your ' + inputMessage[4] + '</span>');
+            } else if (inputVal[4] !== inputVal[5]) {
+                $('#password-error').html('<span class="error">Passwords entered does not match</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (!$("#register_accept_checkbox").is(":checked")) {
+                $('#password-error').html('<span class="error">Please read and acknowledge terms and condition</span>');
+            } else {
+                retrn = retrn + 1;
+            }
+
+            if (retrn === 6) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
+    </script>
+    {% block javascript %}
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,64 @@
+<style type="text/css">
+    .drp{
+        overflow:hidden;
+    }
+
+    .drp select{
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        padding: 2px 2px 2px 2px;
+        border: none;
+        background: transparent url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat 60px center;
+    }
+</style>
+{{form_start(form)}}
+<div class="form-holder">
+    <div class="row gap-0">
+        <div class="col-xss-4 col-xs-4 col-sm-4 drp">
+            {#                <input class="form-control" placeholder="Looking for job" />#}
+            {{form_widget(form.jobTitle)}}
+        </div>
+        <div class="col-xss-4 col-xs-4 col-sm-4 drp">
+            {#                <input class="form-control" placeholder="Place to work" />#}
+            {{form_widget(form.category)}}
+        </div>
+        <div class="col-xss-4 col-xs-4 col-sm-4 drp">
+            {#                <input class="form-control" placeholder="Place to work" />#}
+            {{form_widget(form.subCategory)}}
+        </div>
+    </div>
+</div>
+<div class="btn-holder">
+    <button type="submit" class="btn"><i class="ion-android-search"></i></button>
+</div>
+{{ form_end(form) }}
+<script type="text/javascript" src="{{ asset('bundles/job/js/jquery-1.11.3.min.js')}}"></script>
+<script type="text/javascript">
+    var $category = $('#{{form.category.vars.id}}');
+    // When sport gets selected ...
+    $category.change(function () {
+        // ... retrieve the corresponding form.
+        var $form = $(this).closest('form');
+        // Simulate form data, but only include the selected sport value.
+        var data = {};
+        data[$category.attr('name')] = $category.val();
+        // Submit data via AJAX to the form's action path.
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            data: data,
+            success: function (html) {
+                // Replace current position field ...
+                $('#{{form.subCategory.vars.id}}').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(html).find('#{{form.subCategory.vars.id}}')
+                        );
+                // Position field now displays the appropriate positions.
+            }
+        });
+    });
+    $(document).ready(function () {
+
+    });
+</script>

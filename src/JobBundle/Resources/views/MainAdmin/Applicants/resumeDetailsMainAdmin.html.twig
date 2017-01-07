@@ -1,0 +1,225 @@
+{% extends 'JobBundle:MainAdmin:index.html.twig' %}
+{% block mainadminstylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        .fileinput-upload,.fileinput-upload-button{
+            display: none !important;
+        }
+        .adi-mone {
+            display: none !important;
+            bottom: 0;
+            cursor: pointer;
+            height: 100%;
+            opacity: 0;
+            padding: 8px 10px;
+            position: absolute;
+            right: 0;
+            width: 100%;
+            z-index: 11;
+        }
+        .required:after { 
+            content:" *";
+            color: red;
+        }
+    </style>
+{% endblock %}
+{%block mainadminbody%}
+    <style type="text/css">
+
+        .required:after { 
+            content:" *";
+            color: red;
+        }
+    </style>
+    {{ form_start(form,{'attr':{'class':'post-form-wrapper'} }) }}
+    <div class="row gap-20">
+        <div class="col-sm-12 col-md-12 mb-15">
+            <h3 class="heading mb-10 required">Upload Resume</h3>
+            <div class="input-group">
+{#                <span class="input-group-addon btn btn-defatlt" id="basic-addon1">Upload Resume ...</span>#}
+                {{form_widget(form.resume)}}
+                {#<input type="text" class="form-control" id="show-resume-name" placeholder="Click to upload your resume.. (pdf format only)" aria-describedby="basic-addon1">#}
+            </div>
+        </div>
+        <div class="clear" style="height:35px;border-top: solid 1px;"></div>
+        <div class="col-sm-12 col-md-12 mb-15">
+            <h3 class="heading mb-10 required">Educations</h3>
+        </div>
+        <div class="clear"></div>
+        <div id="dynamicAddForm" class="clearfix">
+            <div class="resume-education serial-number-div" data-prototype="{% filter escape %}{% include "JobBundle:JobSeeker:jobSeekerResumeEducation.html.twig" with {"education": form.resumeEducation.vars.prototype,"index":"__index__"} only %}{% endfilter %}">
+                {% for education in form.resumeEducation %}
+                    {% include "AdsBundle:MlaLetter:jobSeekerResumeEducation.html.twig" with {"education": education,"index":loop.index} only %}
+                {% endfor %}
+                <div style="clear: both;"></div>
+            </div>
+            <div id="dynamicAddForm_noforms_template" class="dynamic-add-form-empty clearfix">
+                <div class="alert alert-warning mb-0">Please click "Add education" button to add Education details</div>
+            </div>
+            <div id="dynamicAddForm_controls" class="dynamic-add-form-action">
+                <div id="dynamicAddForm_add">
+                    <button class="btn btn-primary btn-sm add-new-education"><span>Add Education</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="clear mb-30"></div>
+        <div class="clear mb-30"></div>
+        <div class="col-sm-12 col-md-12 mb-15">
+            <h3 class="heading mb-15">Work Experiences</h3>
+        </div>
+        <div id="dynamicAddForm2" class="clearfix">
+            <div class="resume-workExp serial-number-div" data-prototype="{% filter escape %}{% include "JobBundle:JobSeeker:jobSeekerResumeWorkExp.html.twig" with {"workExpResume": form.workExpResume.vars.prototype,"index":"__index__"} only %}{% endfilter %}">
+                {% for workExp in form.workExpResume %}
+                    {% include "AdsBundle:MlaLetter:jobSeekerResumeEducation.html.twig" with {"workExp": workExp,"index":loop.index} only %}
+                {% endfor %}
+                <div style="clear: both;"></div>
+            </div>                                    
+            <div id="dynamicAddForm2_noforms_template" class="dynamic-add-form-empty">
+                <div class="alert alert-warning mb-0">Please click "Add Work Experiences" button to add previous work experience details</div>
+            </div>
+            <div id="dynamicAddForm2_controls" class="dynamic-add-form-action">
+                <div id="dynamicAddForm2_add">
+                    <button class="btn btn-primary btn-sm add-new-workExp"><span>Add Work Experiences</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="clear mb-30"></div>
+        <div class="col-sm-12 col-md-12 mb-15">
+            <h3 class="heading mb-10">Skills</h3>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group bootstrap3-wysihtml5-wrapper mb-20">
+                <label>Technical/Aditional Skills:</label>
+                <select class="js-skills-tags form-control select2-hidden-accessible" multiple="multiple" tabindex="-1" aria-hidden="true"></select>
+                {{form_widget(form.skills)}}
+            </div>
+        </div>
+        <div class="clear mb-30"></div>
+        <div class="col-sm-12 col-md-12 mb-15">
+            <h3 class="heading mb-10">Interests &amp; Hobby</h3>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group bootstrap3-wysihtml5-wrapper mb-20">
+                <label>Information:</label>
+                {{form_widget(form.aditionalInfo)}}
+            </div>
+        </div>
+        <div class="clear mb-30"></div>
+        <div class="clear"></div>
+        <div class="col-sm-6 mt-30">
+            <button type="submit" class="btn btn-primary btn-lg">Create now</button>
+        </div>
+    </div>
+    {{ form_end(form) }} 
+{%endblock%}
+
+{% block mainadminjavascript %}
+    {{ parent() }}
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+        var $tags = $(".js-skills-tags");
+        $.fn.select2.defaults.set("width", "100%");
+        $tags.select2({
+            tags: true
+        });
+
+        var $collectionHolder;
+        var $addNewButton = $('.add-new-education');
+        var $removeButton = $(".dynamic-add-form-close");
+
+        var $collectionHolderWrkExp;
+        var $addNewButtonWrkExp = $('.add-new-workExp');
+        var $removeButtonWrkExp = $(".dynamic-add-form-close");
+        $(document).ready(function () {
+        {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                    var message = "{{message}}";
+                    swal(message);
+            {% endfor %}
+        {% endfor %}
+                $tags.change(function () {
+                    $("#{{form.skills.vars.id}}").val($(this).val());
+                });
+
+                $('.js-datepicker').datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    format: 'yyyy-mm-dd',
+                    yearRange: "-100:+0"
+                });
+
+                $collectionHolder = $('div.resume-education');
+                $collectionHolder.data('index', $collectionHolder.find('div.resume-education-div').length);
+                $(document.body).on("click", ".add-new-education", function (e) {
+                    e.preventDefault();
+                    addEducationForm($collectionHolder, $addNewButton);
+
+                });
+                $(document).on("click", ".dynamic-add-form-close-education", function () {
+                    if ($(".education-div-count").length > 1) {
+                        var $target = $("#" + $(this).data("target"));
+                        $target.remove();
+                    }
+                });
+
+
+                $collectionHolderWrkExp = $('div.resume-workExp');
+                $collectionHolderWrkExp.data('index', $collectionHolderWrkExp.find('div.resume-workExp-div').length);
+                $(document.body).on("click", ".add-new-workExp", function (e) {
+                    e.preventDefault();
+                    addWorkExpForm($collectionHolderWrkExp, $addNewButtonWrkExp);
+
+                });
+                $(document).on("click", ".dynamic-add-form-close-workExp", function () {
+                    if ($(".workExp-div-count").length > 1) {
+                        var $target = $("#" + $(this).data("target"));
+                        $target.remove();
+                    }
+                });
+
+                $("#{{form.resume.vars.id}}").change(function () {
+                    var fileName = $(this).val();
+                    $("#show-resume-name").val(fileName);
+                });
+            });
+
+            function addEducationForm($collectionHolder, $addNewButton) {
+                var prototype = $collectionHolder.data('prototype');
+                var index = $collectionHolder.data('index');
+                var $newForm = prototype.replace(/__name__/g, index);
+                var $newForm = $newForm.replace(/__index__/g, index + 1);
+
+                $collectionHolder.data('index', index + 1);
+
+                var $newFormTr = $newForm;
+                $(".resume-education").append($newFormTr);
+                setTableTheme();
+            }
+
+            function addWorkExpForm($collectionHolder, $addNewButton) {
+                var prototype = $collectionHolder.data('prototype');
+                var index = $collectionHolder.data('index');
+                var $newForm = prototype.replace(/__name__/g, index);
+                var $newForm = $newForm.replace(/__index__/g, index + 1);
+
+                $collectionHolder.data('index', index + 1);
+
+                var $newFormTr = $newForm;
+                $(".resume-workExp").append($newFormTr);
+                setTableTheme();
+            }
+
+
+
+            $(".clear-project").click(function () {
+                var $target = $("#" + $(this).data("target"));
+                $target.find('textarea').html("");
+                $target.find('input, select')
+                        .not(':button, :submit, :reset, :hidden')
+                        .val('')
+                        .removeAttr('checked')
+                        .removeAttr('selected');
+
+            });
+    </script>
+{% endblock %}

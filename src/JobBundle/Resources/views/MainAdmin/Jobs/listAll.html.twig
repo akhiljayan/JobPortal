@@ -1,0 +1,176 @@
+{% extends 'JobBundle:MainAdmin:index.html.twig' %}
+{% block mainadminstylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+{%block mainadminbody%}
+    <div class="admin-content-wrapper">
+        <div class="admin-section-title">
+            <h2>Manage Applicants</h2>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel panel-body">
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-header">
+                            </div>
+                            <div class="box-body table-responsive no-padding">
+                                <table class="table table-hover" style="border: 2px solid;">
+                                    <tbody>
+                                        <tr>
+                                            <th></th>
+                                            <th  style="text-align:center">Job Title</th>
+                                                {#                                            <th  style="text-align:center">Category</th>#}
+                                            <th  style="text-align:center">Skills</th>
+                                            <th  style="text-align:center">Salary/Vacancy</th>
+                                            <th  style="text-align:center">Home Page Visibility</th>
+                                            <th  style="text-align:center">Action</th>
+                                        </tr>
+                                        {%for job in jobs%}
+                                            <tr>
+                                                <td>
+                                                    <div class="recent-job-item clearfix">
+                                                        <div class="image">
+                                                            {%if job.image is null%}
+                                                                <img src="{{ asset('bundles/job/images/defaultJobImage.png')}}" alt="image" />
+                                                            {%else%}
+                                                                <img src="{{ asset('bundles/job/images/defaultJobImage.png')}}" alt="image"/>
+                                                            {%endif%}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="content">
+                                                        <h4 style="margin-bottom:0px">{{job.jobTitle}}</h4>
+                                                        <p  style="margin-bottom:0px">{{job.company}}</p>
+                                                        <p  style="margin-bottom:0px">Added on:{{job.addedDate|date('d/m/Y')}}</p>
+                                                    </div>
+                                                </td>
+                                                {#<td>
+                                                    <div class="job-location">
+                                                        {{job.category.category}}
+                                                        <p>{{job.subCategory.subCategory}}</p>
+                                                    </div>
+                                                </td>#}
+                                                <td>
+                                                    {% set skills = job.skillsRequired|split(',') %}
+                                                    <div class="job-item-list-bottom">
+                                                        <div class="sub-category">
+                                                            {%for skill in skills%}
+                                                                <a href="javascript:void(0);">{{skill}}</a>
+                                                            {%endfor%}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p style="margin-bottom:0px"><u>Salary:</u> {{job.slaryStart}} - {{job.salaryTo}}</p>
+                                                    <p style="margin-bottom:0px"><u>Experience:</u> {{job.experYearFrom}} - {{job.exprYearTo}}</p>
+                                                    <p style="margin-bottom:0px"><u>Vacancy:</u> {{job.vacancy}}</p>
+                                                </td>
+                                                <td>
+                                                    {%if job.frontPageVisible == true%}
+                                                        <input type="checkbox" class="show-fron-page" data-guid="{{job.guId}}" style="display:block; opacity: 1.00;float:none;margin: auto;" checked>
+                                                    {%else%}
+                                                        <input type="checkbox" class="show-fron-page" data-guid="{{job.guId}}" style="display:block; opacity: 1.00;float:none;margin: auto;">
+                                                    {%endif%}
+                                                </td>
+                                                <td>
+                                                    {%if job.priority == true%}
+                                                        <div class="flip" style="margin: auto;">
+                                                            <input type="checkbox" name="flip" class="flip-cb" id="fs-{{job.guId}}" data-guid="{{job.guId}}" checked style="display:none">
+                                                            <label class="flip-label" for="fs-{{job.guId}}"  style="padding: 0px 0px 0px 0px">
+                                                                <div class="flip-inner"></div>
+                                                                <div class="flip-switch"></div>
+                                                            </label>
+                                                        </div>
+                                                    {%else%}
+                                                        <div class="flip"  style="margin: auto;">
+                                                            <input type="checkbox" name="flip" class="flip-cb" data-guid="{{job.guId}}" id="fs-{{job.guId}}" style="display:none">
+                                                            <label class="flip-label" for="fs-{{job.guId}}" style="padding: 0px 0px 0px 0px">
+                                                                <div class="flip-inner"></div>
+                                                                <div class="flip-switch"></div>
+                                                            </label>
+                                                        </div>
+                                                    {%endif%}
+                                                    <span class="font12 block spacing1 font400 text-center">View Details</span>
+                                                </td>
+                                            </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%endblock%}
+
+{% block mainadminjavascript %}
+    {{ parent() }}
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+        {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                    var message = "{{message}}";
+                    swal(message);
+            {% endfor %}
+        {% endfor %}
+            
+                $(".show-fron-page").change(function () {
+                    var guid = $(this).data('guid');
+                    var path = "{{path('change_job_priority',{'guId':"__guId__"})}}";
+                    path = path.replace("__guId__", guid);
+                    $.ajax({
+                        type: "POST",
+                        url: path,
+                        context: this,
+                        beforeSend: function () {
+                            $(this).after();
+                        },
+                        success: function ($data) {
+                            if ($data) {
+                                swal($data);
+                            } else {
+                                swal("Some error occured !!!");
+                            }
+                        },
+                        complete: function () {
+                            $(this).next(".loading-img").remove();
+                        }
+                    });
+                });
+
+                $(".flip-cb").change(function () {
+                    var guid = $(this).data('guid');
+                    var path = "{{path('change_job_to_featured',{'guId':"__guId__"})}}";
+                    path = path.replace("__guId__", guid);
+                    $.ajax({
+                        type: "POST",
+                        url: path,
+                        context: this,
+                        beforeSend: function () {
+                            $(this).after();
+                        },
+                        success: function ($data) {
+                            if ($data) {
+                                swal($data);
+                            } else {
+                                swal("Some error occured !!!");
+                            }
+                        },
+                        complete: function () {
+                            $(this).next(".loading-img").remove();
+                        }
+                    });
+                });
+
+            });
+    </script>
+{% endblock %}

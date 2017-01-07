@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+<div class="modal-body" style="height: 111px;">
+{#    {{form_row(form.subCategory)}}
+    {{form_row(form.category)}}#}
+    <div class="col-md-12">
+        <div class="col-md-6">{{form_row(form.subCategory)}}</div>
+        <div class="col-md-6">{{form_row(form.category)}}</div>
+    </div>
+</div>
+<div class="modal-footer text-center">
+    <button type="submit" id="submit-sub-category" class="btn btn-primary">Add</button>
+    <button type="button" data-dismiss="modal" class="btn btn-primary btn-inverse">Close</button>
+</div>
+{{ form_end(form) }}

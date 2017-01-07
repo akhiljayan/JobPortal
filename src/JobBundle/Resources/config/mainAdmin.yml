@@ -1,0 +1,74 @@
+main_admin_home_page:
+    pattern: /dashboard
+    defaults:
+        _controller: "JobBundle:MainAdmin:index"
+        
+main_admin_manage_masters:
+    pattern: /masters
+    defaults:
+        _controller: "JobBundle:MainAdmin:manageMasters"
+
+manage_masters_add_category:
+    pattern: /masters/add_category
+    defaults:
+        _controller: "JobBundle:MainAdmin:manageMastersAddCategory"
+        
+manage_masters_add_sub_category:
+    pattern: /masters/add_sub_category
+    defaults:
+        _controller: "JobBundle:MainAdmin:manageMastersAddSubCategory"
+        
+main_admin_add_job:
+    pattern: /jobs/add_new_job
+    defaults:
+        _controller: "JobBundle:MainAdmin:addNewJob"
+        
+main_admin_manage_job:
+    pattern: /jobs/manage_job
+    defaults:
+        _controller: "JobBundle:MainAdmin:manageJobs"
+        
+change_job_priority:
+    pattern: /change/job_priority/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:changeJobPriority"
+        
+change_job_to_featured:
+    pattern: /change/job_feature/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:changeJobFeature"
+        
+main_admin_manage_aplicants:
+    pattern: /manage/aplicants
+    defaults:
+        _controller: "JobBundle:MainAdmin:manageAplicants"
+        
+change_applicant_priority:
+    pattern: /change/applicant/priority/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:changeApplicantPriority"
+        
+show_applicant_in_front_page:
+    pattern: /show/applicant/front_page/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:showApplicantInFrontPage"
+        
+main_admin_add_aplicants:
+    pattern: /mainadmin/addaplicants
+    defaults:
+        _controller: "JobBundle:MainAdmin:mainAdminAddAplicants"
+        
+main_admin_add_aplicants_second_phase:
+    pattern: /mainadmin/addaplicants/2ndphase/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:mainAdminAddAplicantsSecondPhase"
+        
+job_seeker_details_form_main_admin:
+    pattern: /mainadmin/aplicants/details/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:mainAdminAplicantsDetails"
+        
+job_seeker_resume_form_main_admin:
+    pattern: /mainadmin/aplicants/resume/{guId}
+    defaults:
+        _controller: "JobBundle:MainAdmin:mainAdminAplicantsResume"

@@ -1,0 +1,193 @@
+{% extends 'JobBundle:Default:jobPortalPageMaster.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        .fileinput-upload,.fileinput-upload-button{
+            display: none !important;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <ol class="breadcrumb-list booking-step">
+                <li><a href="#">All Employers</a></li>
+                <li><span>Expedia</span></li>
+            </ol>
+        </div>
+    </div>
+    <!-- end breadcrumb -->
+    <div class="admin-container-wrapper">
+        <div class="container">
+            <div class="GridLex-gap-15-wrappper">
+                <div class="GridLex-grid-noGutter-equalHeight">
+                    <div class="GridLex-col-3_sm-4_xs-12">
+                        <div class="admin-sidebar">
+                            <div class="admin-user-item">
+                                <div class="image">
+                                    <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" height="600" width="600" alt="image" class="img-circle" />
+                                </div>
+                                <h4>{{app.user.username}}</h4>
+                                <p class="user-role">Job Seeker</p>
+                            </div>
+                            <div class="admin-user-action text-center">
+                                <a href="#" class="btn btn-primary btn-sm btn-inverse">Create Resume</a>
+                            </div>
+                            <ul class="admin-user-menu clearfix">
+                                {#<li>
+                                    <a href="#"><i class="fa fa-tachometer"></i> Dashboard</a>
+                                </li>#}
+                                <li>
+                                    <a href="#"><i class="fa fa-user"></i>View Profile</a>
+                                </li>
+                                <li class="active">
+                                    <a href="#"><i class="fa fa-key"></i>Manage Profile</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-bell"></i> My Alert</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-bookmark"></i> Saved Jobs</a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-pencil"></i>Manage Resume</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="GridLex-col-9_sm-8_xs-12">
+                        <div class="admin-content-wrapper">
+                            <div class="admin-section-title">
+                                <h2 style="text-transform: capitalize;">Manage Profile</h2>
+                            </div>
+                            {{ form_start(form,{'attr':{'class':'post-form-wrapper'} }) }}
+                            <div class="row gap-20">
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group bootstrap-fileinput-style-01">
+                                        <label>Photo</label>
+                                        <input type="file" name="form-register-photo" id="form-register-photo">
+                                        <span class="font12 font-italic">** photo must not bigger than 250kb</span>
+                                        {{ form_errors(form) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label  class="required">First Name</label>
+                                        {{ form_widget(form.firstName) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label  class="required">Last Name</label>
+                                        {{ form_widget(form.lastName) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Date Of Birth</label>
+                                        <div class="row gap-5">
+                                            {{ form_widget(form.dob) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Email</label>
+                                        {{ form_widget(form.email) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        <label class="required">Education</label>
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        {{ form_widget(form.educationLevelId) }}
+                                    </div>
+                                    <div class="col-sm-6 col-md-4">
+                                        {{ form_widget(form.course) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Majors</label>
+                                        {{ form_widget(form.majors) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Address</label>
+                                        {{ form_widget(form.address) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">City/town</label>
+                                        {{ form_widget(form.cityTown) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Province/State</label>
+                                        {{ form_widget(form.state) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Zip Code</label>
+                                        {{ form_widget(form.zipCode) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Country</label>
+                                        {{ form_widget(form.country) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-6 col-md-4">
+                                    <div class="form-group">
+                                        <label class="required">Phone Number</label>
+                                        {{ form_widget(form.phoneNumber) }}
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="form-group bootstrap3-wysihtml5-wrapper">
+                                        <label>About me</label>
+                                        {{ form_widget(form.aboutMe) }}    
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="col-sm-12 mt-10">
+                                    {{ form_widget(form.save) }} 
+                                    <a href="#" class="btn btn-primary btn-inverse">Cancel</a>
+                                </div>
+                            </div>
+                            {{ form_end(form) }} 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.js-datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                format: 'yyyy-mm-dd',
+                yearRange: "-100:+0"
+            });
+        });
+    </script>
+{% endblock %}

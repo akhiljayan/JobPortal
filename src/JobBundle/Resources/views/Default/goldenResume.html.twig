@@ -1,0 +1,70 @@
+<style type="text/css">
+    .job-item-grid .content-bottom .sub-category span {
+        border-color: #ddd;
+        font-size: 11px;
+        letter-spacing: 1px;
+        padding: 3px 7px;
+    }
+    .sub-category span {
+        padding: 5px 10px;
+    }
+    .category-group p.sub-category span, .sub-category span {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        color: #939393;
+        display: inline-block;
+        font-weight: 400;
+        line-height: 1;
+        margin-bottom: 3px;
+        padding: 5px 12px;
+    }
+</style>
+{%for applicant in applicants%}
+
+    <a href="#" class="recent-job-item clearfix">
+        <div class="GridLex-grid-middle">
+            <div class="GridLex-col-4_xs-12">
+                <div class="job-position">
+                    <div class="image">
+                        {%if applicant.jobSeekerId.userImage is null%}
+                            <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" alt="image">
+                        {%else%}
+                            <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" alt="image">
+                        {%endif%}
+                    </div>
+                    <div class="content">
+                        <h4>{{applicant.jobSeekerId.firstName}} {{applicant.jobSeekerId.lastName}}</h4>
+                        <p>Experience: 0+</p>
+                    </div>
+                </div>
+            </div>
+            <div class="GridLex-col-3_xs-8_xss-12 mt-10-xss" style="text-align:left">
+                <div class="content">
+                        <p>+91 {{applicant.jobSeekerId.phoneNumber}}</p>
+                        <p>{{applicant.jobSeekerId.email}}</p>
+                    </div>
+            </div>
+            <div class="GridLex-col-3_xs-8_xss-12 mt-10-xss" style="text-align:center">
+                {%if applicant.skills is not null%}
+                    {% set skills = applicant.skills|split(',') %}
+                    <div class="job-item-list-bottom">
+                        <div class="sub-category">
+                            {%for skill in skills%}
+                                <span>{{skill}}</span>
+                            {%endfor%}
+                        </div>
+                    </div>
+                {%else%}
+                    <span>-</span>
+                {%endif%}
+            </div>
+            <div class="GridLex-col-2_xs-4_xss-12">
+                <div class="job-label label label-success">
+                    View Details
+                </div>
+            </div>
+        </div>
+    </a>
+
+{%endfor%}
+

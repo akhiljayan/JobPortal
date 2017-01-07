@@ -1,0 +1,73 @@
+home_page:
+    pattern: /
+    defaults:
+        _controller: "JobBundle:Default:index"
+        
+home_page_redirect:
+    pattern: /home
+    defaults:
+        _controller: "JobBundle:Default:homePageRedirect"
+        
+job_bundle_home_page:
+    pattern: /
+    defaults:
+        _controller: "JobBundle:Default:index"
+        
+_index:
+    pattern: /
+    defaults: { _controller: "JobBundle:Default:home" }
+
+redirect_login_page:
+    pattern: /user-login
+    defaults:
+        _controller: "JobBundle:Default:redirectToLoginPage"    
+
+new_user_creation:
+    pattern: /user-registration
+    defaults:
+        _controller: "JobBundle:Default:newUserRegistration"    
+        
+new_user_username_check:
+    pattern: /username-check/{name}
+    defaults:
+        _controller: "JobBundle:Default:newUserUsernameCheck"    
+
+job_seeker_details_form:
+    pattern: /job-seeker-details/form
+    defaults:
+        _controller: "JobBundle:JobSeeker:jobSeekerDetailsForm"    
+
+job_seeker_resume_form:
+    pattern: /job-seeker-resume/form
+    defaults:
+        _controller: "JobBundle:JobSeeker:jobSeekerResumeForm"    
+        
+home_page_job_search:
+    pattern: /home_page/jobSearch
+    defaults:
+        _controller: "JobBundle:Default:homePageJobSearch"  
+        
+main_job_search_form:
+    pattern: /main/jobsearch/form
+    defaults:
+        _controller: "JobBundle:Search:mainJobSearchForm" 
+        
+main_resume_search_form:
+    pattern: /main/resumesearch/form
+    defaults:
+        _controller: "JobBundle:Search:mainResumeSearchForm" 
+        
+menu_search_jobs:
+    pattern: /search/jobs
+    defaults:
+        _controller: "JobBundle:Default:searchForJobs"
+        
+menu_search_golden_resume:
+    pattern: /search/golden-resume
+    defaults:
+        _controller: "JobBundle:Default:searchForGoldenResume"
+        
+main_admin:
+    resource: "mainAdmin.yml"
+    prefix:  /mainadmin
+    

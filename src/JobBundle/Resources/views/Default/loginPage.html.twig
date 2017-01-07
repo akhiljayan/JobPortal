@@ -1,0 +1,68 @@
+{% extends 'JobBundle:Default:jobPortalPageMaster.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    {% for key, flash in app.session.flashbag.all() %}
+        {% for message in flash %}
+            <div class="alert alert-{{ key }}">
+                <b>Alert!</b> {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <div id="loginPage" class="login-box-wrapper" tabindex="-1" data-width="550"  data-backdrop="static" data-keyboard="false" data-replace="true" style="padding:0">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            <h4 class="modal-title text-center">Sign-in into your account</h4>
+            {% if error %}
+                <div class="alert alert-danger" style="margin-left:0px; padding-right:10px;padding-left:10px;">
+                    <b>Alert!</b>
+                    {{ error|trans}}
+                </div>
+            {% endif %}
+        </div>
+        <form class="login" action="{{ path('fos_user_security_check') }}" id="{{form.vars.id}}" method="post"  autocomplete="off" >
+            <div class="modal-body" style="width: 33%; margin: auto;">
+                <div class="row gap-20">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group"> 
+                            <label>Username</label>
+                            <input class="login-input form-control" type="text" autocomplete="off" id="_peru" name="_peru" required="required" placeholder="Pls enter your username" name="user" >
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12">
+                        <div class="form-group"> 
+                            <label>Password</label>
+                            <input class="login-input form-control" type="password" autocomplete="off" id="_thakol" name="_thakol" required="required" placeholder="Pls enter your password" name="password">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="checkbox-block"> 
+                            <input id="remember_me_checkbox" name="remember_me_checkbox" class="checkbox" value="First Choice" type="checkbox"> 
+                            <label class="" for="remember_me_checkbox">Remember me</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="login-box-link-action">
+                            <a data-toggle="modal" href="#forgotPasswordModal">Forgot password?</a> 
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12">
+                        <div class="login-box-box-action">
+                            No account? <a data-toggle="modal" href="#registerModal">Register</a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                    <input type="hidden" id="_uppu" name="_uppu" value="{{ browserSalt }}" />
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <button class="login-submit btn btn-primary" id="_submit" name="_submit" type="submit">Log in</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary btn-inverse">Close</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}

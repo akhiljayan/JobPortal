@@ -1,0 +1,124 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 27, 2016, 3:37:33 AM
+    Author     : akhil
+*/
+
+.flip {
+    position: relative;
+    width: 111px;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select: none;
+}
+.flip input[type=checkbox] {
+    display: none;
+}
+.flip-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #999999;
+    border-radius: 50px;
+}
+.flip-inner {
+    width: 200%;
+    margin-left: -100%;
+    -webkit-transition: margin 0.3s ease-in 0s;
+    -moz-transition: margin 0.3s ease-in 0s;
+    -ms-transition: margin 0.3s ease-in 0s;
+    -o-transition: margin 0.3s ease-in 0s;
+    transition: margin 0.3s ease-in 0s;
+}
+.flip-inner:before, .flip-inner:after {
+    float: left;
+    width: 50%;
+    height: 38px;
+    padding: 0;
+    line-height: 38px;
+    font-size: 12px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.flip-inner:before {
+    content: "Featured";
+    padding-left: 14px;
+    background-color: #0A9900;
+    color: #FFFFFF;
+}
+.flip-inner:after {
+    content: "Unfeatured";
+    padding-right: 14px;
+    background-color: #EB0000;
+    color: #FFFFFF;
+    text-align: right;
+}
+.flip-switch {
+    width: 14px;
+    margin: 12px;
+    background: #FFFFFF;
+    border: 2px solid #999999;
+    border-radius: 50px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 71px;
+    -webkit-transition: all 0.3s ease-in 0s;
+    -moz-transition: all 0.3s ease-in 0s;
+    -ms-transition: all 0.3s ease-in 0s;
+    -o-transition: all 0.3s ease-in 0s;
+    transition: all 0.3s ease-in 0s;
+}
+.flip-cb:checked + .flip-label .flip-inner {
+    margin-left: 0;
+}
+.flip-cb:checked + .flip-label .flip-switch {
+    right: 0;
+}
+
+.flip > input[type="radio"] + label:hover::before, input[type="checkbox"] + label:hover::before, input[type="radio"]:checked + label::before, input[type="checkbox"]:checked + label::before {
+    color: #33b6cb;
+    display: none;
+}
+
+.flip > input[type='radio'] + label:before,
+input[type='checkbox'] + label:before {
+    display: none;
+    font-family: 'FontAwesome';
+    content: "\f096";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    color: #999;
+}
+
+.flip > input[type='radio'] + label:before {
+    display: none;
+    content: "\f1db";
+}
+
+.flip > input[type='radio']:checked + label:before {
+    display: none;
+    content: "\f192";
+}
+
+.flip > input[type='checkbox']:checked + label:before {
+    display: none;
+    content: "\f14a";
+}
+
+.flip > input[type='radio'] + label:hover::before,
+input[type='checkbox'] + label:hover::before,
+input[type='radio']:checked + label:before,
+input[type='checkbox']:checked + label:before {
+    display: none;
+    color: #33B6CB;
+}

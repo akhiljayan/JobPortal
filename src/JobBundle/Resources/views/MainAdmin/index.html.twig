@@ -1,0 +1,98 @@
+{% extends 'JobBundle:Default:jobPortalPageMaster.html.twig' %}
+{% block stylesheets %}
+    
+    {{ parent() }}
+    <style type='text/css'>
+    {% block mainadminstylesheets %}{% endblock %}
+</style>
+{% endblock %}
+{% block body %}
+    {#    {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                <div class="alert alert-{{ key }}">
+                    <b>Alert!</b> {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}#}
+
+
+    <div class="main-wrapper">
+        <div class="admin-container-wrapper" style="padding: 45px 0px 0px; ">
+            <div class="container">
+                <div class="GridLex-gap-15-wrappper">
+                    <div class="GridLex-grid-noGutter-equalHeight">
+                        <div class="GridLex-col-3_sm-4_xs-12">
+                            <div class="admin-sidebar">
+                                <div class="admin-user-item">
+                                    <div class="image">
+                                        <img src="{{ asset('bundles/job/images/man/default-user-image.gif')}}" height="600" width="600" alt="image" class="img-circle" />
+                                    </div>
+                                    <h4>{{app.user.name}}</h4>
+                                    <p class="user-role">Main Admin</p>
+                                </div>
+                                <div class="admin-user-action text-center">
+                                    <a href="#" class="btn btn-primary btn-sm btn-inverse">Go to Dashboard</a>
+                                </div>
+                                <ul class="admin-user-menu clearfix">
+                                    <li>
+                                        <a href="{{path('main_admin_add_aplicants')}}"><i class="fa fa-tachometer"></i> Add Applicant Resume</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{path('main_admin_manage_aplicants')}}"><i class="fa fa-user"></i>View/Manage Applicants</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{path('main_admin_add_job')}}"><i class="fa fa-key"></i>Add a Job</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{path('main_admin_manage_job')}}"><i class="fa fa-bell"></i>View/Manage Jobs</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{path('main_admin_manage_masters')}}"><i class="fa fa-bookmark"></i>Master Management</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="fa fa-sign-out"></i> Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="GridLex-col-9_sm-8_xs-12">
+                            {%block mainadminbody%}
+                                <div class="admin-content-wrapper">
+                                    <div class="admin-section-title">
+                                        <h2>Hello {{app.user.name}}!</h2>
+                                        <p>Your last loged-in: <span class="text-primary">{{app.user.lastLogin|date("h:i:s a")}} - {{app.user.lastLogin|date("d/m/Y")}}</span>
+                                            <span class="pull-right">Dashboard</span>
+                                        </p>
+                                    </div>
+                                    <div class="admin-empty-dashboard" style="padding: 125px 30px;">
+                                        <div class="icon">
+                                            <i class="ion-ios-book-outline"></i>
+                                        </div>
+                                        <h4>You have no any activities yet!</h4>
+                                        <a href="#" class="btn btn-primary">Manage Applicants</a>
+                                        <a href="#" class="btn btn-primary">Manage Jobs</a>
+                                        <a href="#" class="btn btn-primary">Golden Resume</a>
+                                    </div>
+                                </div>
+                            {%endblock%}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+        {% for key, flash in app.session.flashbag.all() %}
+            {% for message in flash %}
+                    var message = "{{message}}";
+                    swal(message);
+            {% endfor %}
+        {% endfor %}
+            });
+    </script>
+{% block mainadminjavascript %}{% endblock %}
+{% endblock %}

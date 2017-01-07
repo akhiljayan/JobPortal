@@ -1,0 +1,116 @@
+{% extends 'JobBundle:MainAdmin:index.html.twig' %}
+{% block mainadminstylesheets %}
+    {{ parent() }}
+{% endblock %}
+{%block mainadminbody%}
+    <div class="admin-content-wrapper">
+        <div class="admin-section-title">
+            <h2>Manage Masters</h2>
+        </div>
+        <div class="admin-empty-dashboard" style="padding: 125px 30px;">
+            <a href="javascript:void(0);" id="job-category" class="btn btn-primary">Job Categories</a>
+            <a href="javascript:void(0);" id="job-sub-category" class="btn btn-primary">Job Sub-Categories</a>
+            <a href="#" id="education-levels" class="btn btn-primary">Education Levels</a>
+        </div>
+    </div>
+
+    <div id="add-category-modal" class="modal fade login-box-wrapper" tabindex="-1" style="display: none;" data-backdrop="static" data-keyboard="false" data-replace="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title text-center">Add a Category</h4>
+        </div>
+        <div class="category">
+            <form action="{{path('manage_masters_add_category')}}" method="POST" id="add-category-form">
+                <div class="modal-body">
+                    <label>Category Name</label>
+                    <input type="text" class="form-control" style="width:100%" name="category" id="category-val" required="required">
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="submit" id="submit-category" class="btn btn-primary">Add</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-primary btn-inverse">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="add-sub-category-modal" class="modal fade login-box-wrapper" tabindex="-1" style="display: none;" data-backdrop="static" data-keyboard="false" data-replace="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title text-center">Add a Category</h4>
+        </div>
+        <div id="sub-category">
+
+        </div>
+    </div>
+
+
+
+{%endblock%}
+
+{% block mainadminjavascript %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            {% for key, flash in app.session.flashbag.all() %}
+                {% for message in flash %}
+                    var message  = "{{message}}";
+                    swal(message);
+                {% endfor %}
+            {% endfor %}
+            
+            $("#job-category").click(function () {
+                $("#category-val").val('');
+                $("#add-category-modal").modal("show");
+            });
+
+            $("#submit-category").click(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: $("#add-category-form").attr("action"),
+                    context: this,
+                    data: {'category': $("#category-val").val()},
+                    beforeSend: function () {
+                        $(this).after();
+                    },
+                    success: function ($data) {
+                        if ($data) {
+                            swal("Category Added!!");
+                            $("#add-category-modal").modal("hide");
+                        } else {
+                            swal("Some error occured.. please try again!!");
+                        }
+                    },
+                    complete: function () {
+                        $(this).next(".loading-img").remove();
+                    }
+                });
+            });
+
+            $("#job-sub-category").click(function (e) {
+                var path = "{{path('manage_masters_add_sub_category')}}";
+                $.ajax({
+                    type: "POST",
+                    url: path,
+                    context: this,
+                    beforeSend: function () {
+                        $(this).after();
+                    },
+                    success: function ($data) {
+                        if ($data) {
+                            $("#sub-category").html($data);
+                            $("#add-sub-category-modal").modal("show");
+                        } else {
+                            swal("Some error occured.. please try again!!");
+                        }
+                    },
+                    complete: function () {
+                        $(this).next(".loading-img").remove();
+                    }
+                });
+            });
+
+
+        });
+    </script>
+{% endblock %}

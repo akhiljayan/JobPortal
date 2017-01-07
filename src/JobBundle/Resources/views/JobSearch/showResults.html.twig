@@ -1,0 +1,119 @@
+{% extends 'JobBundle:JobSearch:index.html.twig' %}
+{% block resultsStyle %}
+    {{ parent() }}
+{% endblock %}
+{% block resultsBody %}
+    <div class="sorting-wrappper">
+        <div class="sorting-header">
+            <h3 class="sorting-title">We found "{{jobs|length}}" jobs for:</h3>
+        </div>
+        <div class="sorting-content">
+            <div class="row">
+                <div class="col-sm-12 col-md-7">
+                    <div class="row gap-10">
+                        {% for key, data in formData %}
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label><u>{{key}}</u>: {{data}}</label>
+                                </div>
+                            </div> 
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-wrapper">
+        <div class="row">
+            <div class="col-sm-10 col-md-12 mt-25">
+                <div class="result-list-wrapper">
+                    {%if jobs|length > 0%}
+                        {% for job in jobs %}
+                            <div class="job-item-list featured">
+                                {%if job.priority == 1%}
+                                    <div class="featured-label"><span>featured</span></div>
+                                {%endif%}
+                                <div class="image">
+                                    {%if job.image is null%}
+                                        <img src="{{ asset('bundles/job/images/defaultJobImage.png')}}" alt="image"  style="margin: 50% auto auto;"/>
+                                    {%else%}
+                                    {%endif%}
+                                </div>
+                                <div class="content">
+                                    <div class="job-item-list-info">
+                                        <div class="row">
+                                            <div class="col-sm-7 col-md-8">
+                                                <h4 class="heading">{{job.jobTitle}}</h4>
+                                                <div class="meta-div clearfix mb-25">
+                                                    <span>at <a href="#">{{job.company}}</a></span>
+                                                    <span class="job-label label label-success">Full Time</span>
+                                                </div>
+                                                <p class="texing">{{job.jobDescription|striptags|convert_encoding('UTF-8', 'HTML-ENTITIES')}}</p>
+                                            </div>
+                                            <div class="col-sm-5 col-md-4">
+                                                <ul class="meta-list">
+                                                    <li>
+                                                        <span>Location:</span>
+                                                        {{job.location}}
+                                                    </li>
+                                                    <li>
+                                                        <span>Rate/Salary:</span>
+                                                        {%if job.slaryStart==0 and job.salaryTo ==0%}
+                                                            Negotiable
+                                                        {%else%}
+                                                            {{job.slaryStart}} - {{job.salaryTo}}
+                                                        {%endif%}
+                                                    </li>
+                                                    <li>
+                                                        <span>Experience</span>
+                                                        {{job.experYearFrom}} Yr - {{job.exprYearTo}} Yr
+                                                    </li>
+                                                    <li>
+                                                        <span>Posted On: </span>
+                                                        {{job.addedDate | date('d/m/Y')}}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% set skills = job.skillsRequired|split(',') %}
+                                    <div class="job-item-list-bottom">
+                                        <div class="row">
+                                            <div class="col-sm-7 col-md-8">
+                                                <div class="sub-category">
+                                                    {%for skill in skills%}
+                                                        <a href="javascript:void(0);">{{skill}}</a>
+                                                    {%endfor%}
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5 col-md-4">
+                                                <a href="#" class="btn btn-primary">View Job</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {%else%}
+                        <div class="job-item-list featured"> 
+                                <div class="content">
+                                    <div class="job-item-list-info">
+                                        <div class="row">
+                                            <label>No Jobs Found !!!</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    {%endif%}
+                </div>
+                <div class="pager-wrapper">
+                    {#                            Pagination#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block resultsScript %}
+    {{ parent() }}
+{% endblock %}

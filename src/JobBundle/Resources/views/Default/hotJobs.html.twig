@@ -1,0 +1,36 @@
+{%for job in jobs%}
+    <div class="slick-carousel-item">
+        <div class="job-item-grid">
+            <div class="fav-save">
+                <a href="#"><i class="fa fa-heart-o"></i></a>
+            </div>
+            <div class="labeling">
+                <span class="label label-success">FULL TIME</span>
+            </div>
+            <a href="#">
+                <div class="image">
+                    <div class="vertical-middle">
+                        {%if job.image is null%}
+                            <img src="{{ asset('bundles/job/images/defaultJobImage.png')}}" alt="image" />
+                        {%else%}
+                            <img src="{{ asset('bundles/job/images/defaultJobImage.png')}}" alt="image"/>
+                        {%endif%}
+                    </div>
+                </div>
+                <div class="content">
+                    <h4 class="heading">{{job.jobTitle}}</h4>
+                    <p class="location"><i class="fa fa-map-marker text-primary"></i> <strong class="text-primary">{{job.company}}</strong> - {{job.location}}</p>
+                    <p class="date text-muted font12 font-italic">Posted on {{job.addedDate|date('d/m/Y')}}</p>
+                </div>
+            </a>
+            {% set skills = job.skillsRequired|split(',') %}
+            <div class="content-bottom">
+                <div class="sub-category">
+                    {%for skill in skills%}
+                        <a href="javascript:void(0);">{{skill}}</a>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+{%endfor%}                
